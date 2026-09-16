@@ -12,6 +12,10 @@ const anton = Anton({
 export const metadata: Metadata = {
   title: "Visual Code Lab",
   description: "See complex code. Then make it short.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
