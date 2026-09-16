@@ -1,10 +1,31 @@
-import type { Lesson } from "@/lib/schemas";
+import { fillVisual } from "@/lib/visual";
+import type { Annotation, Lesson, TraceStep, VisualMap, VisualRole } from "@/lib/schemas";
 
-export type ExampleLesson = Omit<Lesson, "id" | "createdAt"> & {
+type ExamplePiece = {
+  id: string;
+  role: VisualRole;
+  title: string;
+  what: string;
+  sample?: string;
+  tokens?: string[];
+  before?: string;
+  after?: string;
+  startLine: number;
+  endLine: number;
+};
+
+export type ExampleLesson = Omit<Lesson, "id" | "createdAt" | "visual" | "annotations" | "steps"> & {
   id: string;
   year: string;
   preview: string[];
   category: string;
+  visual?: {
+    insight: string;
+    metaphor: string;
+    pieces: ExamplePiece[];
+  };
+  annotations: Annotation[];
+  steps: TraceStep[];
 };
 
 export const EXAMPLES: ExampleLesson[] = [
@@ -367,7 +388,9 @@ export function exampleToLesson(example: ExampleLesson): Lesson {
     original: example.original,
     simplified: example.simplified,
     mermaid: example.mermaid,
-    visual: example.visual,
+    visual: example.visual
+      ? fillVisual(example.summary ?? "", example.annotations, example.visual as VisualMap)
+      : undefined,
     summary: example.summary,
     annotations: example.annotations,
     steps: example.steps,
